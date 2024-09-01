@@ -5,12 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Skill extends Model
+class CareerSkills extends Model
 {
     use HasFactory;
-
-    public function careers()
-    {
-        $this->belongsToMany(Career::class);
-    }
 }

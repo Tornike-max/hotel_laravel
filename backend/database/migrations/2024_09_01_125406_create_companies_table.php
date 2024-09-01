@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Career;
-use App\Models\Skill;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,10 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_skills', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->id();
+            $table->text('name');
+            $table->text('website');
+            $table->text('logo');
+            $table->longText('description');
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Skill::class);
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_skills');
+        Schema::dropIfExists('companies');
     }
 };
