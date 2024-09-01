@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CareerRequest;
+use App\Http\Requests\CareerUpdateRequest;
 use App\Http\Resources\CareerResource;
 use App\Models\Career;
 use Illuminate\Http\Request;
@@ -33,27 +35,108 @@ class CareerController extends Controller
         return $response;
     }
 
+    public function show(string $id)
+    {
+        $career = Career::query()->with('company')->findOrFail($id);
+
+        if (empty($career)) {
+            $response = [
+                'message' => 'Data not found',
+                'status' => '404 Not found',
+                'data' => []
+            ];
+            return $response;
+        }
+
+        $response = [
+            'message' => 'True',
+            'status' => '200 ok',
+            'data' => new CareerResource($career)
+        ];
+
+        return $response;
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CareerRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+
+        if (empty($validatedData)) {
+            return response()->json([
+                'message' => 'False',
+                'status' => '422 Unprocessable Entity',
+                'data' => []
+            ], 422);
+        }
+
+        $career = Career::create($validatedData);
+
+        return response()->json([
+            'message' => 'True',
+            'status' => '200 OK',
+            'data' => new CareerResource($career)
+        ], 200);
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CareerUpdateRequest $request, string $id)
     {
-        //
+
+        $validatedData = $request->validated();
+        $career = Career::query()->findOrFail($id);
+
+        if (empty($validatedData)) {
+            return response()->json([
+                'message' => 'No data provided for update',
+                'status' => '422 Unprocessable Entity',
+                'data' => []
+            ], 422);
+        }
+
+        $updateResult = $career->update($validatedData);
+
+        if (!$updateResult) {
+            return response()->json([
+                'message' => 'Update failed',
+                'status' => '400 Bad Request',
+                'data' => []
+            ], 400);
+        } else {
+            return response()->json([
+                'message' => 'Update successful',
+                'status' => '200 OK',
+                'data' => $career
+            ], 200);
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $career = Career::query()->findOrFail($id);
+        if (!isset($career)) {
+            return response()->json([
+                'message' => 'Target data not founded',
+                'status' => '404 Not found',
+                'data' => []
+            ], 404);
+        }
+
+        $career->delete();
+        return response()->json([
+            'message' => 'Target deleted',
+            'status' => '200 ok',
+            'data' => []
+        ], 200);
     }
 }

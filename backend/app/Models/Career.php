@@ -9,6 +9,15 @@ class Career extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'description',
+        'location',
+        'salary',
+        'employment_type',
+        'experience_level',
+        'company_id'
+    ];
     public function company()
     {
         return $this->belongsTo(Skill::class);
