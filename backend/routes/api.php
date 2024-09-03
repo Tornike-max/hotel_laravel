@@ -9,6 +9,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/careers', [CareerController::class, 'index']);
+
 Route::get('/careers/{id}', [CareerController::class, 'show']);
 Route::post('/careers', [CareerController::class, 'store']);
 Route::post('/careers/{id}', [CareerController::class, 'update']);

@@ -15,7 +15,20 @@ class CareerController extends Controller
      */
     public function index()
     {
-        $careers = Career::with('company')->latest()->paginate(10);
+        $search = request('searchVal', '');
+        $selectVal = request('selectVal', '');
+
+        $query = Career::with('company')->latest();
+
+        if ($search !== '') {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        if ($selectVal !== '') {
+            $query->where('description', 'like', '%' . $selectVal . '%');
+        }
+
+        $careers = $query->paginate(10);
 
         if ($careers->isEmpty()) {
             $response = [
@@ -23,16 +36,16 @@ class CareerController extends Controller
                 'status' => '404 Not found',
                 'data' => []
             ];
-            return $response;
+            return response()->json($response);
         }
 
         $response = [
-            'message' => 'True',
-            'status' => '200 ok',
+            'message' => 'Data retrieved successfully',
+            'status' => '200 OK',
             'data' => CareerResource::collection($careers)
         ];
 
-        return $response;
+        return response()->json($response);
     }
 
     public function show(string $id)

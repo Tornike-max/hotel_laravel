@@ -20,7 +20,7 @@ class Career extends Model
     ];
     public function company()
     {
-        return $this->belongsTo(Skill::class);
+        return $this->belongsTo(Company::class);
     }
 
     public function skills()
