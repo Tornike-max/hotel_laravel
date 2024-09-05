@@ -1,71 +1,72 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { Link, useSearchParams } from "react-router-dom";
 
-const items = [
-    {
-        id: 1,
-        title: "Back End Developer",
-        department: "Engineering",
-        type: "Full-time",
-        location: "Remote",
-    },
-    {
-        id: 2,
-        title: "Front End Developer",
-        department: "Engineering",
-        type: "Full-time",
-        location: "Remote",
-    },
-    {
-        id: 3,
-        title: "User Interface Designer",
-        department: "Design",
-        type: "Full-time",
-        location: "Remote",
-    },
-];
+interface Category {
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
+}
 
-// interface UrlInterface {
-//     current_page: number;
-//     first_page_url: string;
-//     last_page_url: string;
-//     next_page_url: string;
-//     per_page: number;
-//     prev_page_url: string;
-//     total: number;
-// }
+interface Company {
+    id: number;
+    name: string;
+    website: string;
+    logo: string;
+    description: string;
+}
 
-// interface CareerDataInterface {
-//     created_at: string;
-//     description: string;
-//     employment_type: string;
-//     experience_level: string;
-//     id: 8;
-//     location: string;
-//     salary: string;
-//     title: string;
-// }
+interface Career {
+    id: number;
+    title: string;
+    description: string;
+    location: string;
+    salary: string;
+    employment_type: string;
+    experience_level: string;
+    category_id: number;
+    company_id: number;
+    category: Category;
+    company: Company;
+    created_at: string;
+    updated_at: string;
+}
 
-export default function Pagination({ data }: { data }) {
-    console.log(data);
+interface PaginationInterface {
+    current_page: number;
+    data: Career[];
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number;
+    total: number;
+}
+
+export default function Pagination({ data }: { data: PaginationInterface }) {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const handleChangePage = (path: string) => {
-        if (path === null) return;
+        if (path === null || path === "") return;
         searchParams.set("page", path.slice(-1));
         setSearchParams(searchParams);
     };
+
     return (
         <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
             <div className="flex flex-1 justify-between sm:hidden">
                 <Link
-                    to={data?.prev_page_url}
+                    to={data?.prev_page_url || ""}
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                     Previous
                 </Link>
                 <Link
-                    to={data?.next_page_url}
+                    to={data?.next_page_url || ""}
                     className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                     Next
@@ -88,7 +89,7 @@ export default function Pagination({ data }: { data }) {
                     >
                         <button
                             onClick={() =>
-                                handleChangePage(data?.prev_page_url)
+                                handleChangePage(data?.prev_page_url || "")
                             }
                             className={`${
                                 data?.prev_page_url === null &&
@@ -107,7 +108,7 @@ export default function Pagination({ data }: { data }) {
 
                         <button
                             onClick={() =>
-                                handleChangePage(data?.next_page_url)
+                                handleChangePage(data?.next_page_url || "")
                             }
                             className={`${
                                 data?.next_page_url === null &&

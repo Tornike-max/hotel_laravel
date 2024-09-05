@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { CareerType } from "../types/types";
+import { formatDate } from "./formatDate";
 
-const CareerTable = ({
+const CompanyTable = ({
     career,
     logo,
     companyName,
@@ -20,36 +21,35 @@ const CareerTable = ({
     return (
         <tr
             onClick={() => handleNavigate()}
-            key={career.id}
             className="hover:bg-gray-100 duration-150 transition-all cursor-pointer"
         >
+            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {career.title}
+            </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <div className="flex items-center">
+                <div className="flex items-center gap-1">
                     <img
                         className="h-10 w-10 rounded-full"
-                        src={logo || career.company.logo}
-                        alt={companyName || career.company.name}
+                        src={logo}
+                        alt={""}
                         loading="lazy"
                     />
                     <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">
-                            {companyName || career.company.name}
+                            {companyName}
                         </div>
                     </div>
                 </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {career.title}
             </td>
 
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {career.location}
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {career.experience_level}
+                {formatDate(career.created_at)}
             </td>
         </tr>
     );
 };
 
-export default CareerTable;
+export default CompanyTable;

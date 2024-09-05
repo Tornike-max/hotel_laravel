@@ -20,4 +20,8 @@ class Company extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function careers()
+    {
+        return $this->belongsToMany(Career::class, 'career_companies');
+    }
 }

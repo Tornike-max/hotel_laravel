@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Application;
 use App\Models\Career;
+use App\Models\CareerCompany;
 use App\Models\CareerLocation;
 use App\Models\CareerSkills;
 use App\Models\Category;
@@ -33,6 +34,6 @@ class DatabaseSeeder extends Seeder
         // CareerSkills::factory(20)->create();
         // UserSkill::factory(20)->create();
         // Location::factory(20)->create();
-        CareerLocation::factory(20)->create();
+        // CareerLocation::factory(20)->create();
     }
 }

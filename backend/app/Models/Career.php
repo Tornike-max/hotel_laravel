@@ -32,4 +32,9 @@ class Career extends Model
     {
         return $this->belongsToMany(Skill::class, 'career_skills');
     }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'career_companies');
+    }
 }

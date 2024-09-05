@@ -18,7 +18,7 @@ class CareerController extends Controller
         $search = request('searchVal', '');
         $selectVal = request('selectVal', '');
 
-        $query = Career::with(['company', 'category'])->latest();
+        $query = Career::with(['company', 'category', 'skills', 'companies'])->orderBy('id', 'desc');
 
         if ($search !== '') {
             $query->where('title', 'like', '%' . $search . '%');
@@ -42,29 +42,12 @@ class CareerController extends Controller
             return response()->json($response);
         }
 
-        return $careers;
 
-        $response = [
-            'message' => 'Data retrieved successfully',
-            'status' => '200 OK',
-            'data' => CareerResource::collection($careers),
-            'page_urls' => [
-                'current_page' => $careers->currentPage(), // Keep this
-                'first_page_url' => $careers->url(1),
-                'last_page_url' => $careers->url($careers->lastPage()),
-                'next_page_url' => $careers->nextPageUrl(),
-                'prev_page_url' => $careers->previousPageUrl(),
-                'per_page' => $careers->perPage(),
-                'total' => $careers->total(),
-                'from' => $careers->from(),
-                'to' => $careers->to(),
-                'path' => $careers->path(),
-                'links' => $careers->links(),
-            ],
-        ];
-
-        return $response;
-        return response()->json($response);
+        return response()->json([
+            'data' => $careers,
+            'message' => 'Success',
+            'status' => '200 OK'
+        ]);
     }
 
     public function show(string $id)

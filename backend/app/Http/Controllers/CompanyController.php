@@ -15,7 +15,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::query()->with('user')->latest()->paginate(10);
+        $companies = Company::query()->with('user', 'careers')->latest()->paginate(10);
 
         if ($companies->isEmpty()) {
             return response()->json([
@@ -60,7 +60,7 @@ class CompanyController extends Controller
      */
     public function show(string $id)
     {
-        $company = Company::query()->with('user')->findOrFail($id);
+        $company = Company::query()->with('user', 'careers')->findOrFail($id);
 
         if (!isset($company)) {
             return response()->json([

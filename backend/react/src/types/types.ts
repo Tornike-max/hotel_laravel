@@ -6,6 +6,7 @@ export interface CareerType {
     location: string;
     salary: string;
     title: string;
+    created_at: string;
     company: {
         name: string;
         website: string;

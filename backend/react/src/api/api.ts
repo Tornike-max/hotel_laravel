@@ -19,7 +19,7 @@ export const getCareers = async ({
             }
         );
 
-        const result = data.data ?? [];
+        const result = data.data.data ?? [];
         return result;
     } catch (error) {
         console.error(error);
@@ -59,5 +59,27 @@ export const getCategories = async () => {
     } catch (error) {
         console.error(error);
         throw new Error("error while getting data");
+    }
+};
+
+export const getCompanies = async () => {};
+
+export const getCompany = async (companyId: string) => {
+    try {
+        const data = await axios.get(
+            `http://127.0.0.1:8000/api/companies/${companyId}`
+        );
+
+        if (!data.data) {
+            throw new Error("No Data");
+        }
+
+        const result = data.data.data;
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error(
+            "Error while getting company with this id=>" + companyId
+        );
     }
 };

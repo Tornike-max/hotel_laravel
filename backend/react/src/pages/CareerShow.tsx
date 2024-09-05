@@ -6,6 +6,7 @@ const CareerShow = () => {
     const { data, isPending } = useGetCareer();
 
     if (isPending) return <p>Loading...</p>;
+    console.log(data);
     return (
         <div className="w-full flex justify-center items-center flex-col gap-2">
             <h2 className="w-full text-start text:xl sm:text-2xl font-semibold">
@@ -15,7 +16,10 @@ const CareerShow = () => {
             <div className="w-full flex justify-start items-center gap-2">
                 <NavLink path={"/"} label={"ყველა ვაკანსია"} />
                 <span>|</span>
-                <NavLink path={"/"} label={"ამ ორგანიზაციის ყველა ვაკანსია"} />
+                <NavLink
+                    path={`/company/${data.company.id}`}
+                    label={"ამ ორგანიზაციის ყველა ვაკანსია"}
+                />
             </div>
 
             <div className="w-full flex justify-center items-center flex-col mt-4 gap-2 bg-gray-200 rounded-md px-4 py-3">
