@@ -18,17 +18,20 @@ class CareerController extends Controller
         $search = request('searchVal', '');
         $selectVal = request('selectVal', '');
 
-        $query = Career::with('company')->latest();
+        $query = Career::with(['company', 'category'])->latest();
 
         if ($search !== '') {
             $query->where('title', 'like', '%' . $search . '%');
         }
 
-        if ($selectVal !== '') {
-            $query->where('description', 'like', '%' . $selectVal . '%');
+        if (!empty($selectVal)) {
+            $query->whereHas('category', function ($q) use ($selectVal) {
+                $q->where('name', 'like', '%' . $selectVal . '%');
+            });
         }
 
         $careers = $query->paginate(10);
+
 
         if ($careers->isEmpty()) {
             $response = [
@@ -39,12 +42,28 @@ class CareerController extends Controller
             return response()->json($response);
         }
 
+        return $careers;
+
         $response = [
             'message' => 'Data retrieved successfully',
             'status' => '200 OK',
-            'data' => CareerResource::collection($careers)
+            'data' => CareerResource::collection($careers),
+            'page_urls' => [
+                'current_page' => $careers->currentPage(), // Keep this
+                'first_page_url' => $careers->url(1),
+                'last_page_url' => $careers->url($careers->lastPage()),
+                'next_page_url' => $careers->nextPageUrl(),
+                'prev_page_url' => $careers->previousPageUrl(),
+                'per_page' => $careers->perPage(),
+                'total' => $careers->total(),
+                'from' => $careers->from(),
+                'to' => $careers->to(),
+                'path' => $careers->path(),
+                'links' => $careers->links(),
+            ],
         ];
 
+        return $response;
         return response()->json($response);
     }
 

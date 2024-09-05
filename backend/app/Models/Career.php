@@ -23,6 +23,11 @@ class Career extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function skills()
     {
         return $this->belongsToMany(Skill::class, 'career_skills');

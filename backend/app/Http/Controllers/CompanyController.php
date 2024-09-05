@@ -94,6 +94,14 @@ class CompanyController extends Controller
 
         $company = Company::query()->findOrFail($id);
 
+        if (!isset($company)) {
+            return response()->json([
+                'message' => "No data founded with this id $id",
+                'status' => '404 Not found!',
+                'data' => []
+            ]);
+        }
+
         $updateRes = $company->update($validatedData);
 
         if ($updateRes) {
@@ -116,6 +124,22 @@ class CompanyController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $company = Company::query()->findOrFail($id);
+
+        if (!isset($company)) {
+            return response()->json([
+                'message' => "No data founded with this id $id",
+                'status' => '404 Not found!',
+                'data' => []
+            ]);
+        }
+
+        $company->delete();
+
+        return [
+            'message' => 'Data deleted successfully',
+            'status' => '200 ok',
+            'data' => []
+        ];
     }
 }

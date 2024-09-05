@@ -1,15 +1,17 @@
+import { useSearchParams } from "react-router-dom";
 import { useGetCareers } from "../hooks/useGetCareers";
 import { CareerType } from "../types/types";
 import CareerTable from "../ui/CareerTable";
+import Pagination from "../ui/Pagination";
 import SearchInput from "../ui/SearchInput";
 import SelectCategory from "../ui/SelectCategory";
 
 const CareersPage = () => {
-    const { data, isPending } = useGetCareers();
+    const [searchParams] = useSearchParams();
+    const page = searchParams.get("page") || "";
+    const { data, isPending } = useGetCareers(page);
 
     if (isPending) return <p>Loading...</p>;
-
-    console.log(data);
 
     return (
         <div className="w-full flex justify-center items-center flex-col gap-4">
@@ -37,11 +39,13 @@ const CareersPage = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                        {data?.map((career: CareerType) => (
+                        {data?.data.map((career: CareerType) => (
                             <CareerTable key={career.id} career={career} />
                         ))}
                     </tbody>
                 </table>
+
+                <Pagination data={data} />
             </div>
         </div>
     );
