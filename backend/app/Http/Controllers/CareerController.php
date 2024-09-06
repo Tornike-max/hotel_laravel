@@ -52,7 +52,8 @@ class CareerController extends Controller
 
     public function show(string $id)
     {
-        $career = Career::query()->with('company')->findOrFail($id);
+        $career = Career::query()->with(['company', 'category', 'skills'])->findOrFail($id);
+
 
         if (empty($career)) {
             $response = [
@@ -66,7 +67,7 @@ class CareerController extends Controller
         $response = [
             'message' => 'True',
             'status' => '200 ok',
-            'data' => new CareerResource($career)
+            'data' => $career
         ];
 
         return $response;

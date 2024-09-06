@@ -21,6 +21,7 @@ class CareerResource extends JsonResource
             'description' => $this->description,
             'company' => new CompanyResource($this->whenLoaded('company')),
             'category' => new CategoryResource($this->whenLoaded('category')),
+            'skills' => new CategoryResource($this->whenLoaded('skills')),
             'location' => $this->location,
             'salary' => $this->salary,
             'employment_type' => $this->employment_type,

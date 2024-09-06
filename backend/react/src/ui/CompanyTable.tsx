@@ -15,7 +15,7 @@ const CompanyTable = ({
 
     const handleNavigate = () => {
         if (!career.id) return;
-        return navigate(`careers/${career.id}`);
+        return navigate(`/careers/${career.id}`);
     };
 
     return (
