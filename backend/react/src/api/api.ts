@@ -3,19 +3,22 @@ import axios from "axios";
 export const getCareers = async ({
     searchVal,
     selectVal,
+    filterVal,
     page,
 }: {
     searchVal: string;
     selectVal: string;
+    filterVal: string;
     page: string;
 }) => {
+    console.log(filterVal);
     try {
         const data = await axios.get(
             `http://127.0.0.1:8000/api/careers${
                 page !== null ? `?page=${page}` : ""
             } `,
             {
-                params: { searchVal, selectVal },
+                params: { searchVal, selectVal, filterVal },
             }
         );
 

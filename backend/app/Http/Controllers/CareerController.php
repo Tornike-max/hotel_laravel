@@ -17,6 +17,8 @@ class CareerController extends Controller
     {
         $search = request('searchVal', '');
         $selectVal = request('selectVal', '');
+        $filterVal = request('filterVal', '');
+
 
         $query = Career::with(['company', 'category', 'skills', 'companies'])->orderBy('id', 'desc');
 
@@ -30,8 +32,11 @@ class CareerController extends Controller
             });
         }
 
-        $careers = $query->paginate(10);
+        if ($filterVal !== '') {
+            $query->where('experience_level', 'like', '%' . $filterVal . '%');
+        }
 
+        $careers = $query->paginate(10);
 
         if ($careers->isEmpty()) {
             $response = [
