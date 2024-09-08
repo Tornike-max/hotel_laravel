@@ -1,7 +1,7 @@
 import { Key } from "react";
-import { useGetCareer } from "../hooks/useGetCareer";
-import { formatDate } from "../ui/formatDate";
-import NavLink from "../ui/NavLink";
+import { useGetCareer } from "../../hooks/useGetCareer";
+import { formatDate } from "../../ui/formatDate";
+import NavLink from "../../ui/NavLink";
 
 const CareerShow = () => {
     const { data, isPending } = useGetCareer();

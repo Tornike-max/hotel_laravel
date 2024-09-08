@@ -8,6 +8,7 @@ import {
     DisclosurePanel,
 } from "@headlessui/react";
 import { BellIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Link, useLocation } from "react-router-dom";
 
 const user = {
     name: "Tom Cook",
@@ -15,24 +16,40 @@ const user = {
     imageUrl:
         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
-const navigation = [
-    { name: "Dashboard", href: "#", current: true },
-    { name: "Team", href: "#", current: false },
-    { name: "Projects", href: "#", current: false },
-    { name: "Calendar", href: "#", current: false },
-    { name: "Reports", href: "#", current: false },
-];
-const userNavigation = [
-    { name: "Your Profile", href: "#" },
-    { name: "Settings", href: "#" },
-    { name: "Sign out", href: "#" },
-];
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
 }
 
 const DisclosureComponent = () => {
+    const { pathname } = useLocation();
+
+    const navigation = [
+        { name: "კარიერა", href: "/", current: pathname === "/" },
+        {
+            name: "გამოაქყვეყნე",
+            href: "/careers/show",
+            current: pathname === "/careers/create",
+        },
+        {
+            name: "Projects",
+            href: "#",
+            current: false,
+        },
+        {
+            name: "Calendar",
+            href: "#",
+            current: false,
+        },
+        { name: "Reports", href: "#", current: false },
+    ];
+
+    const userNavigation = [
+        { name: "Your Profile", href: "#" },
+        { name: "Settings", href: "#" },
+        { name: "Sign out", href: "#" },
+    ];
+
     return (
         <Disclosure as="nav" className="bg-gray-800">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -48,9 +65,9 @@ const DisclosureComponent = () => {
                         <div className="hidden md:block">
                             <div className="ml-10 flex items-baseline space-x-4">
                                 {navigation.map((item) => (
-                                    <a
+                                    <Link
                                         key={item.name}
-                                        href={item.href}
+                                        to={item.href}
                                         aria-current={
                                             item.current ? "page" : undefined
                                         }
@@ -58,11 +75,11 @@ const DisclosureComponent = () => {
                                             item.current
                                                 ? "bg-gray-900 text-white"
                                                 : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                                            "rounded-md px-3 py-2 text-sm font-medium"
+                                            "rounded-md px-3 py-2 text-sm font-medium duration-500 transition-all"
                                         )}
                                     >
                                         {item.name}
-                                    </a>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
@@ -104,12 +121,12 @@ const DisclosureComponent = () => {
                                 >
                                     {userNavigation.map((item) => (
                                         <MenuItem key={item.name}>
-                                            <a
-                                                href={item.href}
+                                            <Link
+                                                to={item.href}
                                                 className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                                             >
                                                 {item.name}
-                                            </a>
+                                            </Link>
                                         </MenuItem>
                                     ))}
                                 </MenuItems>
@@ -137,20 +154,19 @@ const DisclosureComponent = () => {
             <DisclosurePanel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                     {navigation.map((item) => (
-                        <DisclosureButton
+                        <Link
                             key={item.name}
-                            as="a"
-                            href={item.href}
+                            to={item.href}
                             aria-current={item.current ? "page" : undefined}
                             className={classNames(
                                 item.current
                                     ? "bg-gray-900 text-white"
                                     : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                                "block rounded-md px-3 py-2 text-base font-medium"
+                                "block rounded-md px-3 py-2 text-base font-medium duration-500 transition-all"
                             )}
                         >
                             {item.name}
-                        </DisclosureButton>
+                        </Link>
                     ))}
                 </div>
                 <div className="border-t border-gray-700 pb-3 pt-4">

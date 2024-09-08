@@ -1,11 +1,14 @@
 import { useSearchParams } from "react-router-dom";
-import { useGetCareers } from "../hooks/useGetCareers";
-import { CareerType } from "../types/types";
-import CareerTable from "../ui/CareerTable";
-import Pagination from "../ui/Pagination";
-import SearchInput from "../ui/SearchInput";
-import SelectCategory from "../ui/SelectCategory";
-import FilterByExperience from "../ui/FilterByExperience";
+import { useGetCareers } from "../../hooks/useGetCareers";
+import { CareerType } from "../../types/types";
+import CareerTable from "../../ui/CareerTable";
+import Pagination from "../../ui/Pagination";
+import SearchInput from "../../ui/SearchInput";
+import SelectCategory from "../../ui/SelectCategory";
+import FilterByExperience from "../../ui/FilterByExperience";
+import FilterByLocation from "../../ui/FilterByLocation";
+import FilterByEmpType from "../../ui/FilterByEmpType";
+import SalaryRange from "../../ui/SalaryRange";
 
 const CareersPage = () => {
     const [searchParams] = useSearchParams();
@@ -16,10 +19,15 @@ const CareersPage = () => {
 
     return (
         <div className="w-full flex justify-center items-center flex-col gap-4">
-            <div className="w-full flex justify-end items-center gap-2">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                 <SearchInput />
                 <SelectCategory />
                 <FilterByExperience />
+                <FilterByLocation />
+            </div>
+            <div className="w-full flex justify-center items-center gap-2 flex-col">
+                <FilterByEmpType />
+                <SalaryRange />
             </div>
 
             <div className="w-full">
@@ -53,7 +61,7 @@ const CareersPage = () => {
                     </div>
                 )}
 
-                {data?.data?.length < 1 && <Pagination data={data} />}
+                {data?.data?.length > 10 && <Pagination data={data} />}
             </div>
         </div>
     );

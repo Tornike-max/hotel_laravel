@@ -1,24 +1,38 @@
 import axios from "axios";
+import { CareerFormInputs } from "../types/types";
 
 export const getCareers = async ({
     searchVal,
     selectVal,
     filterVal,
+    filterByLocation,
+    filterByEmpType,
+    salaryRange,
     page,
 }: {
     searchVal: string;
     selectVal: string;
     filterVal: string;
+    filterByLocation: string;
+    filterByEmpType: string;
+    salaryRange: string[] | string;
     page: string;
 }) => {
-    console.log(filterVal);
     try {
+        console.log(salaryRange);
         const data = await axios.get(
             `http://127.0.0.1:8000/api/careers${
                 page !== null ? `?page=${page}` : ""
             } `,
             {
-                params: { searchVal, selectVal, filterVal },
+                params: {
+                    searchVal,
+                    selectVal,
+                    filterVal,
+                    filterByLocation,
+                    filterByEmpType,
+                    salaryRange,
+                },
             }
         );
 
@@ -48,6 +62,33 @@ export const getCareer = async (careerId: string) => {
     } catch (error) {
         console.error(error);
         throw new Error("Can't get data");
+    }
+};
+
+export const storeCareer = async (careerData: CareerFormInputs) => {
+    try {
+        const data = await axios.post(
+            `http://127.0.0.1:8000/api/careers`,
+            careerData
+        );
+
+        if (!data.data) {
+            throw new Error("Error while storing new carrer");
+        }
+
+        return data.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+                console.error("Error Response:", error.response.data);
+            } else if (error.request) {
+                console.error("No Response:", error.request);
+            } else {
+                console.error("Error:", error.message);
+            }
+        } else {
+            console.error("Unexpected Error:", error);
+        }
     }
 };
 
@@ -84,5 +125,21 @@ export const getCompany = async (companyId: string) => {
         throw new Error(
             "Error while getting company with this id=>" + companyId
         );
+    }
+};
+
+//locations
+export const getLocations = async () => {
+    try {
+        const data = await axios.get("http://127.0.0.1:8000/api/locations");
+        if (!data.data) {
+            throw new Error("Error while getting locations");
+        }
+
+        const result = data.data.data;
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw Error("Something went wrong");
     }
 };

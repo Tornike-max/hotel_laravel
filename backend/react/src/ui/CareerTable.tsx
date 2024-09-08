@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { CareerType } from "../types/types";
+import { Tooltip } from "@nextui-org/react";
 
 const CareerTable = ({
     career,
@@ -39,7 +40,16 @@ const CareerTable = ({
                 </div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {career.title}
+                {career.title}{" "}
+                <Tooltip
+                    content="Has salary"
+                    delay={1000}
+                    className="text-blue-500"
+                >
+                    <span className="text-blue-500">
+                        {career.salary ? "$" : ""}
+                    </span>
+                </Tooltip>
             </td>
 
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

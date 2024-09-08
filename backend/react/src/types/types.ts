@@ -20,3 +20,13 @@ export interface CareerType {
         };
     };
 }
+
+export interface CareerFormInputs {
+    title: string;
+    description: string;
+    logo?: FileList;
+    salary?: number;
+    location: string;
+    employment_type: string;
+    experience_level: string;
+}
