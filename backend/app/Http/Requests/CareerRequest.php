@@ -24,11 +24,13 @@ class CareerRequest extends FormRequest
         return [
             'title' => 'required',
             'description' => 'required',
+            'logo' => 'nullable',
+            'salary' => 'nullable',
             'location' => 'required',
-            'salary' => 'required',
             'employment_type' => 'required',
             'experience_level' => 'required',
-            'company_id' => 'required'
+            'company_id' => 'nullable',
+            'category_id' => 'nullable'
         ];
     }
 }

@@ -6,7 +6,7 @@ use App\Http\Requests\CareerRequest;
 use App\Http\Requests\CareerUpdateRequest;
 use App\Http\Resources\CareerResource;
 use App\Models\Career;
-use Illuminate\Http\Request;
+
 
 class CareerController extends Controller
 {
@@ -18,6 +18,9 @@ class CareerController extends Controller
         $search = request('searchVal', '');
         $selectVal = request('selectVal', '');
         $filterVal = request('filterVal', '');
+        $filterByLocation = request('filterByLocation', '');
+        $filterByEmpType = request('filterByEmpType', '');
+        $salaryRange = request('salaryRange', []);
 
 
         $query = Career::with(['company', 'category', 'skills', 'companies'])->orderBy('id', 'desc');
@@ -34,6 +37,18 @@ class CareerController extends Controller
 
         if ($filterVal !== '') {
             $query->where('experience_level', 'like', '%' . $filterVal . '%');
+        }
+
+        if ($filterByLocation !== '') {
+            $query->where('location', '=', $filterByLocation);
+        }
+
+        if ($filterByEmpType !== '') {
+            $query->where('employment_type', '=', $filterByEmpType);
+        }
+
+        if (!empty($salaryRange)) {
+            $query->whereBetween('salary', $salaryRange);
         }
 
         $careers = $query->paginate(10);
@@ -92,6 +107,8 @@ class CareerController extends Controller
                 'data' => []
             ], 422);
         }
+        $validatedData['company_id'] = 1;
+        $validatedData['category_id'] = 2;
 
         $career = Career::create($validatedData);
 
