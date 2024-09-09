@@ -30,3 +30,21 @@ export interface CareerFormInputs {
     employment_type: string;
     experience_level: string;
 }
+
+export interface AuthResponse {
+    user: {
+        name: string;
+        email: string;
+        profile_picture: string | null;
+        role: string | null;
+        id: null | number | string;
+    };
+    access_token: string;
+}
+
+export interface AuthContextType extends AuthResponse {
+    setUser: (user: AuthResponse["user"]) => void;
+    setAccessToken: (token: string) => void;
+    isAuth: boolean;
+    isLoading: boolean;
+}

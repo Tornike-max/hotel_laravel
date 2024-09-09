@@ -143,3 +143,84 @@ export const getLocations = async () => {
         throw Error("Something went wrong");
     }
 };
+
+//auth
+
+export const registerUser = async (registerData: {
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+}) => {
+    try {
+        const data = await axios.post(
+            "http://127.0.0.1:8000/api/user/register",
+            registerData
+        );
+
+        if (!data.data) {
+            throw new Error("Can't register");
+        }
+
+        const result = data.data;
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw Error("Something went wrong");
+    }
+};
+
+export const loginUser = async (loginData: {
+    email: string;
+    password: string;
+}) => {
+    try {
+        const data = await axios.post(
+            "http://127.0.0.1:8000/api/session/login",
+            loginData
+        );
+
+        if (!data.data) {
+            throw new Error("Can't login");
+        }
+
+        const result = data.data;
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw Error("Something went wrong");
+    }
+};
+
+export const logOutUser = async () => {
+    try {
+        const data = await axios.post(
+            `http://127.0.0.1:8000/api/session/logout`
+        );
+
+        if (!data.data) {
+            throw new Error("Can't logout");
+        }
+
+        const result = data.data;
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw Error("Something went wrong");
+    }
+};
+
+export const getUser = async () => {
+    const user = await axios.get(
+        `http://127.0.0.1:8000/api/session/user/${localStorage.getItem(
+            "userId"
+        )}`
+    );
+
+    if (!user.data) {
+        window.location.href = "/login";
+    }
+
+    const result = user.data;
+    return result;
+};

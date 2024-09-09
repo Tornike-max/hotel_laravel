@@ -7,6 +7,8 @@ import CompanyPage from "./pages/company/CompanyPage";
 import CompanyShowPage from "./pages/company/CompanyShowPage";
 import CareerShowRatesPage from "./pages/career/CareerShowRatesPage";
 import CareerCreatePage from "./pages/career/CareerCreatePage";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
 
 const App = () => {
     return (
@@ -28,6 +30,9 @@ const App = () => {
                         path="/company/:companyId"
                         element={<CompanyShowPage />}
                     />
+
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
                 </Route>
             </Routes>
         </BrowserRouter>
