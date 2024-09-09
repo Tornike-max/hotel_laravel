@@ -107,8 +107,8 @@ class CareerController extends Controller
                 'data' => []
             ], 422);
         }
-        $validatedData['company_id'] = 1;
-        $validatedData['category_id'] = 2;
+        $validatedData['company_id'] = $validatedData['company_id'] ?? 1;
+        $validatedData['category_id'] = $validatedData['category_id'] ?? 2;
 
         $career = Career::create($validatedData);
 
