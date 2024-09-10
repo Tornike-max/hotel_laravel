@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
+use App\Http\Resources\CompanyIdsResource;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use Illuminate\Http\Request;
@@ -24,11 +25,32 @@ class CompanyController extends Controller
                 'data' => []
             ]);
         }
+
+
         return response()->json([
             'message' => 'Data founded successfully',
             'status' => '200 ok',
             'data' => CompanyResource::collection($companies)
         ]);
+    }
+
+    public function getIds()
+    {
+        $companies = CompanyIdsResource::collection(Company::query()->get() ?? []);
+
+        if ($companies->isEmpty()) {
+            return response()->json([
+                'message' => 'No data founded',
+                'status' => '404 Not found!',
+                'data' => []
+            ]);
+        }
+
+        return response()->json([
+            'status' => '200 ok',
+            'message' => 'success',
+            'data' => $companies
+        ], 200);
     }
 
     /**

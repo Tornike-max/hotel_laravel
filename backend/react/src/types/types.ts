@@ -29,6 +29,8 @@ export interface CareerFormInputs {
     location: string;
     employment_type: string;
     experience_level: string;
+    company_id: string;
+    category_id: string;
 }
 
 export interface AuthResponse {

@@ -9,12 +9,20 @@ import CareerShowRatesPage from "./pages/career/CareerShowRatesPage";
 import CareerCreatePage from "./pages/career/CareerCreatePage";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
+import ProtectedRoute from "./ui/ProtectedRoute";
+import AuthLayout from "./ui/AuthLayout";
 
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route element={<Layout />}>
+                <Route
+                    element={
+                        <ProtectedRoute>
+                            <Layout />
+                        </ProtectedRoute>
+                    }
+                >
                     <Route path="/" element={<CareersPage />} />
                     <Route path="/careers/:careerId" element={<CareerShow />} />
                     <Route
@@ -30,7 +38,8 @@ const App = () => {
                         path="/company/:companyId"
                         element={<CompanyShowPage />}
                     />
-
+                </Route>
+                <Route element={<AuthLayout />}>
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                 </Route>

@@ -24,7 +24,6 @@ class CareerRequest extends FormRequest
         return [
             'title' => 'required',
             'description' => 'required',
-            'logo' => 'nullable',
             'salary' => 'nullable',
             'location' => 'required',
             'employment_type' => 'required',

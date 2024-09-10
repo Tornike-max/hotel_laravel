@@ -25,10 +25,7 @@ function classNames(...classes: string[]) {
 
 const DisclosureComponent = () => {
     const { pathname } = useLocation();
-    const { isAuth, isLoading } = useGetUser();
     const { logOut, isPending } = useLogout();
-
-    if (isLoading) return <p>Loading...</p>;
 
     const navigation = [
         { name: "კარიერა", href: "/", current: pathname === "/" },

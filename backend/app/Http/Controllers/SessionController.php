@@ -27,12 +27,19 @@ class SessionController extends Controller
             ], 404);
         }
 
+
         $user = Auth::user();
+        session(['user' => $user]);
         $token = hash('sha256', Str::random(60));
+        if (session('user')) {
+            return [
+                'user' => session('user')
+            ];
+        }
 
         return response()->json([
             'status' => '200 ok',
-            'session' => session(),
+
             'message' => 'success',
             'data' => [
                 'access_token' => $token,
@@ -47,8 +54,13 @@ class SessionController extends Controller
      */
     public function show(string $id)
     {
-        if (!$id) return;
-
+        if (!$id) {
+            return response()->json([
+                'status' => '400 Bad Request',
+                'message' => 'Invalid ID',
+                'data' => []
+            ], 400);
+        }
         $user = User::query()->findOrFail($id);
 
         if (isset($user)) {
@@ -80,8 +92,6 @@ class SessionController extends Controller
     public function destroy(Request $request)
     {
         Auth::logout();
-        session()->delete();
-
 
         return response()->json([
             'status' => '200 ok',

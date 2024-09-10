@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CareerRequest;
 use App\Http\Requests\CareerUpdateRequest;
 use App\Http\Resources\CareerResource;
+use App\Http\Resources\CompanyIdsResource;
 use App\Models\Career;
-
+use App\Models\Company;
 
 class CareerController extends Controller
 {
@@ -24,6 +25,7 @@ class CareerController extends Controller
 
 
         $query = Career::with(['company', 'category', 'skills', 'companies'])->orderBy('id', 'desc');
+
 
         if ($search !== '') {
             $query->where('title', 'like', '%' . $search . '%');
@@ -107,8 +109,19 @@ class CareerController extends Controller
                 'data' => []
             ], 422);
         }
+
         $validatedData['company_id'] = $validatedData['company_id'] ?? 1;
-        $validatedData['category_id'] = $validatedData['category_id'] ?? 2;
+        $validatedData['category_id'] = $validatedData['category_id'] ?? 1;
+
+        // if ($request->has('logo')) {
+        //     return [
+        //         'hello' => $request->file(),
+        //     ];
+        // }
+
+        // return [
+        //     'data' => $validatedData
+        // ];
 
         $career = Career::create($validatedData);
 

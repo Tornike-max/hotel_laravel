@@ -24,6 +24,7 @@ Route::delete('/careers/{id}', [CareerController::class, 'destroy']);
 
 //companies
 Route::get('/companies', [CompanyController::class, 'index']);
+Route::get('/companies/get-ids', [CompanyController::class, 'getIds']);
 Route::get('/companies/{id}', [CompanyController::class, 'show']);
 Route::post('/companies', [CompanyController::class, 'store']);
 Route::post('/companies/{id}', [CompanyController::class, 'update']);

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { AuthContextType, AuthResponse } from "../types/types";
 import axios from "axios";
-import { redirect } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 
 const initialData: AuthResponse = {
     access_token: "",

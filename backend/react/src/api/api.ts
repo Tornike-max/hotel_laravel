@@ -19,7 +19,6 @@ export const getCareers = async ({
     page: string;
 }) => {
     try {
-        console.log(salaryRange);
         const data = await axios.get(
             `http://127.0.0.1:8000/api/careers${
                 page !== null ? `?page=${page}` : ""
@@ -106,7 +105,23 @@ export const getCategories = async () => {
     }
 };
 
-export const getCompanies = async () => {};
+export const getCompanyIds = async () => {
+    try {
+        const data = await axios.get(
+            `http://127.0.0.1:8000/api/companies/get-ids`
+        );
+
+        if (!data.data) {
+            throw new Error("No Data");
+        }
+
+        const result = data.data.data;
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error while getting ids");
+    }
+};
 
 export const getCompany = async (companyId: string) => {
     try {
