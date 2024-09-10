@@ -8,6 +8,8 @@ use App\Http\Resources\CareerResource;
 use App\Http\Resources\CompanyIdsResource;
 use App\Models\Career;
 use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CareerController extends Controller
 {
@@ -16,6 +18,13 @@ class CareerController extends Controller
      */
     public function index()
     {
+
+        $user = Auth::user();
+
+        return response()->json([
+            'data' => auth()
+        ], 200);
+
         $search = request('searchVal', '');
         $selectVal = request('selectVal', '');
         $filterVal = request('filterVal', '');

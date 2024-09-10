@@ -7,47 +7,48 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class SessionController extends Controller
 {
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreSessionRequest $request)
     {
         $validatedData = $request->validated();
 
-        if (!Auth::attempt($validatedData)) {
+        $user = User::where('email', '=', $validatedData['email'])->first();
+
+        if (!empty($user)) {
+            if (Auth::attempt($validatedData)) {
+                $token = $user->createToken('myToken')->plainTextToken;
+
+                return response()->json([
+                    'status' => '200 OK',
+                    'message' => 'Login successful',
+                    'data' => [
+                        'user' => new UserResource($user),
+                        'access_token' => $token,
+                    ],
+                ], 200);
+            } else {
+                // Return error response when authentication fails
+                return response()->json([
+                    'status' => '401 Unauthorized',
+                    'message' => 'Invalid credentials',
+                ], 401);
+            }
+        } else {
+            // Return error response if user is not found
             return response()->json([
-                'status' => '404',
-                'message' => 'failure',
-                'data' => []
+                'status' => '404 Not Found',
+                'message' => 'User not found!',
+                'errors' => [
+                    'message' => 'The user with the provided email does not exist.'
+                ]
             ], 404);
         }
-
-
-        $user = Auth::user();
-        session(['user' => $user]);
-        $token = hash('sha256', Str::random(60));
-        if (session('user')) {
-            return [
-                'user' => session('user')
-            ];
-        }
-
-        return response()->json([
-            'status' => '200 ok',
-
-            'message' => 'success',
-            'data' => [
-                'access_token' => $token,
-                'user' => new UserResource($user)
-            ],
-
-        ], 200);
     }
+
 
     /**
      * Display the specified resource.
@@ -92,6 +93,9 @@ class SessionController extends Controller
     public function destroy(Request $request)
     {
         Auth::logout();
+
+        Auth::user()->tokens()->delete();
+
 
         return response()->json([
             'status' => '200 ok',
