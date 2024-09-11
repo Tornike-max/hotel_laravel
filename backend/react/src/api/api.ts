@@ -19,10 +19,11 @@ export const getCareers = async ({
     page: string;
 }) => {
     try {
+        const token = localStorage.getItem("access_token") || "";
         const data = await axios.get(
             `http://127.0.0.1:8000/api/careers${
                 page !== null ? `?page=${page}` : ""
-            } `,
+            }`,
             {
                 params: {
                     searchVal,
@@ -31,6 +32,10 @@ export const getCareers = async ({
                     filterByLocation,
                     filterByEmpType,
                     salaryRange,
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
                 },
             }
         );
@@ -46,7 +51,15 @@ export const getCareers = async ({
 export const getCareer = async (careerId: string) => {
     try {
         const res = await fetch(
-            `http://127.0.0.1:8000/api/careers/${careerId}`
+            `http://127.0.0.1:8000/api/careers/${careerId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                    )}`,
+                    "Content-Type": "application/json",
+                },
+            }
         );
 
         if (!res.ok) {
@@ -66,16 +79,28 @@ export const getCareer = async (careerId: string) => {
 
 export const storeCareer = async (careerData: CareerFormInputs) => {
     try {
-        const data = await axios.post(
-            `http://127.0.0.1:8000/api/careers`,
-            careerData
-        );
+        const token = localStorage.getItem("access_token");
 
-        if (!data.data) {
-            throw new Error("Error while storing new carrer");
+        if (!token) {
+            throw new Error("Access token is missing");
         }
 
-        return data.data;
+        const response = await axios.post(
+            `http://127.0.0.1:8000/api/careers`,
+            careerData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        if (!response.data) {
+            throw new Error("Error while storing new career");
+        }
+
+        return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response) {
@@ -83,11 +108,12 @@ export const storeCareer = async (careerData: CareerFormInputs) => {
             } else if (error.request) {
                 console.error("No Response:", error.request);
             } else {
-                console.error("Error:", error.message);
+                console.error("Axios Error:", error.message);
             }
         } else {
             console.error("Unexpected Error:", error);
         }
+        throw error;
     }
 };
 
@@ -106,9 +132,16 @@ export const getCategories = async () => {
 };
 
 export const getCompanyIds = async () => {
+    const token = localStorage.getItem("access_token");
     try {
         const data = await axios.get(
-            `http://127.0.0.1:8000/api/companies/get-ids`
+            `http://127.0.0.1:8000/api/companies/get-ids`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            }
         );
 
         if (!data.data) {
@@ -124,9 +157,16 @@ export const getCompanyIds = async () => {
 };
 
 export const getCompany = async (companyId: string) => {
+    const token = localStorage.getItem("access_token");
     try {
         const data = await axios.get(
-            `http://127.0.0.1:8000/api/companies/${companyId}`
+            `http://127.0.0.1:8000/api/companies/${companyId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            }
         );
 
         if (!data.data) {
@@ -145,8 +185,14 @@ export const getCompany = async (companyId: string) => {
 
 //locations
 export const getLocations = async () => {
+    const token = localStorage.getItem("access_token");
     try {
-        const data = await axios.get("http://127.0.0.1:8000/api/locations");
+        const data = await axios.get("http://127.0.0.1:8000/api/locations", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
         if (!data.data) {
             throw new Error("Error while getting locations");
         }
@@ -208,9 +254,16 @@ export const loginUser = async (loginData: {
 };
 
 export const logOutUser = async () => {
+    const token = localStorage.getItem("access_token");
     try {
         const data = await axios.post(
-            `http://127.0.0.1:8000/api/session/logout`
+            `http://127.0.0.1:8000/api/session/logout`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            }
         );
 
         if (!data.data) {
@@ -226,10 +279,17 @@ export const logOutUser = async () => {
 };
 
 export const getUser = async () => {
+    const token = localStorage.getItem("access_token");
     const user = await axios.get(
         `http://127.0.0.1:8000/api/session/user/${localStorage.getItem(
             "userId"
-        )}`
+        )}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        }
     );
 
     if (!user.data) {
