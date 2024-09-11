@@ -119,7 +119,12 @@ export const storeCareer = async (careerData: CareerFormInputs) => {
 
 export const getCategories = async () => {
     try {
-        const data = await axios.get("http://127.0.0.1:8000/api/categories");
+        const data = await axios.get("http://127.0.0.1:8000/api/categories", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json",
+            },
+        });
         if (!data.data) return;
 
         const result = data.data.data;
@@ -255,9 +260,11 @@ export const loginUser = async (loginData: {
 
 export const logOutUser = async () => {
     const token = localStorage.getItem("access_token");
+
     try {
-        const data = await axios.post(
+        const response = await axios.post(
             `http://127.0.0.1:8000/api/session/logout`,
+            {},
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -266,11 +273,11 @@ export const logOutUser = async () => {
             }
         );
 
-        if (!data.data) {
+        if (!response.data) {
             throw new Error("Can't logout");
         }
 
-        const result = data.data;
+        const result = response.data;
         return result;
     } catch (error) {
         console.error(error);

@@ -31,14 +31,12 @@ class SessionController extends Controller
                     ],
                 ], 200);
             } else {
-                // Return error response when authentication fails
                 return response()->json([
                     'status' => '401 Unauthorized',
                     'message' => 'Invalid credentials',
                 ], 401);
             }
         } else {
-            // Return error response if user is not found
             return response()->json([
                 'status' => '404 Not Found',
                 'message' => 'User not found!',
@@ -92,15 +90,21 @@ class SessionController extends Controller
      */
     public function destroy(Request $request)
     {
-        Auth::logout();
 
-        Auth::user()->tokens()->delete();
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
 
+            return response()->json([
+                'status' => '200 ok',
+                'message' => 'success',
+                'data' => []
+            ], 200);
+        }
 
         return response()->json([
-            'status' => '200 ok',
-            'message' => 'success',
+            'status' => '401',
+            'message' => 'User not authenticated',
             'data' => []
-        ], 200);
+        ], 401);
     }
 }

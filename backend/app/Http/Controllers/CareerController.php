@@ -19,12 +19,10 @@ class CareerController extends Controller
     public function index()
     {
 
-        $user = Auth::user();
-
-        return response()->json([
-            'data' => auth()
-        ], 200);
-
+        if (!Gate::allows('is_admin')) {
+            abort(401);
+            exit();
+        }
         $search = request('searchVal', '');
         $selectVal = request('selectVal', '');
         $filterVal = request('filterVal', '');
