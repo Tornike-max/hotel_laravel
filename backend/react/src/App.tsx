@@ -11,6 +11,8 @@ import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import AuthLayout from "./ui/AuthLayout";
+import AdminPage from "./pages/admin/AdminPage";
+import AdminLayout from "./components/admin/AdminLayout";
 
 const App = () => {
     return (
@@ -38,6 +40,12 @@ const App = () => {
                         path="/company/:companyId"
                         element={<CompanyShowPage />}
                     />
+                </Route>
+                <Route element={<AdminLayout />}>
+                    <Route path="/admin" element={<AdminPage />} />
+                    <Route path="/admin/careers" element={<AdminPage />} />
+                    <Route path="/admin/update" element={<AdminPage />} />
+                    <Route path="/admin/create" element={<AdminPage />} />
                 </Route>
                 <Route element={<AuthLayout />}>
                     <Route path="/register" element={<Register />} />

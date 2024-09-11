@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CompanyController;
@@ -47,6 +48,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //user
     Route::post('/session/logout', [SessionController::class, 'destroy']);
     Route::get('/session/user/{id}', [SessionController::class, 'show']);
+
+    Route::get('/admin/careers', [AdminController::class, 'careersMethod']);
 });
 
 //signup & login

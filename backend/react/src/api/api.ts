@@ -286,23 +286,57 @@ export const logOutUser = async () => {
 };
 
 export const getUser = async () => {
-    const token = localStorage.getItem("access_token");
-    const user = await axios.get(
-        `http://127.0.0.1:8000/api/session/user/${localStorage.getItem(
-            "userId"
-        )}`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+    try {
+        const token = localStorage.getItem("access_token");
+        const user = await axios.get(
+            `http://127.0.0.1:8000/api/session/user/${localStorage.getItem(
+                "userId"
+            )}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        if (!user.data) {
+            window.location.href = "/login";
         }
-    );
 
-    if (!user.data) {
-        window.location.href = "/login";
+        const result = user.data;
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error while getting data");
     }
+};
 
-    const result = user.data;
-    return result;
+//admin
+export const getAdminCareers = async (page: string) => {
+    try {
+        const token = localStorage.getItem("access_token");
+
+        const response = await axios.get(
+            `http://127.0.0.1:8000/api/admin/careers${
+                page !== null ? `?page=${page}` : ""
+            }`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        if (!response.data) {
+            throw Error();
+        }
+
+        const result = response.data.data;
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error while getting data");
+    }
 };

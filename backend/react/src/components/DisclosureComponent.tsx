@@ -8,8 +8,7 @@ import {
     DisclosurePanel,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link, redirect, useLocation } from "react-router-dom";
-import { useGetUser } from "../context/useGetUser";
+import { Link, useLocation } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
 
 const user = {
@@ -35,9 +34,9 @@ const DisclosureComponent = () => {
             current: pathname === "/careers/create",
         },
         {
-            name: "Projects",
-            href: "#",
-            current: false,
+            name: "ადმინ პანელი",
+            href: "/admin",
+            current: pathname === "/admin",
         },
         {
             name: "Calendar",

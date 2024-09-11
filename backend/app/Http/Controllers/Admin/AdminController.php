@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CareerRequest;
+use App\Http\Resources\CareerResource;
 use App\Models\Career;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -10,6 +12,30 @@ use Illuminate\Support\Facades\Gate;
 class AdminController extends Controller
 {
     //career
+    public function careersMethod()
+    {
+        if (!Gate::allows('is_admin')) {
+            abort(401);
+            exit();
+        }
+
+        $careers = Career::query()->with(['company', 'category', 'skills', 'companies'])->latest()->paginate(10);
+
+        if (!isset($careers)) {
+            return response()->json([
+                'status' => '404 not found',
+                'message' => "Careers not found",
+                'data' => []
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $careers,
+            'message' => 'Success',
+            'status' => '200 OK'
+        ]);
+    }
+
     public function deleteCareer(Request $request, string $id)
     {
         if (!Gate::allows('is_admin')) {
@@ -90,11 +116,22 @@ class AdminController extends Controller
         }
     }
 
-    public function storeCareer(Request $request)
+    public function storeCareer(CareerRequest $request)
     {
         if (!Gate::allows('is_admin')) {
-            abort(401);
+            abort(401, 'Unauthorized action.');
             exit();
+        }
+
+        $validatedData = $request->validated();
+
+        if (isset($validatedData)) {
+            $career = Career::create($validatedData);
+            return response()->json([
+                'status' => '200 ok',
+                'message' => 'Career stored successfully',
+                'data' => $career
+            ], 200);
         }
     }
 
